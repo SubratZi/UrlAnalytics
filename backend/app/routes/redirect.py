@@ -10,7 +10,7 @@ router = APIRouter(tags=["redirect"])
 
 @router.get("/r/{short_code}")
 async def redirect_short_url(short_code:str, request: Request, db: Session = Depends(get_db)):
-    variation = db.query(Variation).fileter(Variation.short_code == short_code).first()
+    variation = db.query(Variation).filter(Variation.short_code == short_code).first()
     if not variation:
         raise HTTPException(404, "Short URL not found")
     
@@ -20,7 +20,7 @@ async def redirect_short_url(short_code:str, request: Request, db: Session = Dep
     device_info = parse_device_info(user_agent)
     location = await resolve_location(ip)
 
-    click = click(
+    click = Click(
         variation_id = variation.id,
         device_type = device_info["device_type"],
         browser = device_info["browser"],
