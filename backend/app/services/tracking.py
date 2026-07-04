@@ -25,7 +25,7 @@ async def resolve_location(ip_address: str)-> dict:
     
     try:
         async with httpx.AsyncClient(timeout= 2.0) as client:
-            rep = await client.get(f"http://ip-api.com/json/{ip_address}? fields = country,city,status")
+            resp = await client.get(f"http://ip-api.com/json/{ip_address}? fields = country,city,status")
             data = resp.json()
             if data.get("status") == "success":
                 return{"country": data.get("country", "Unknown"), "city": data.get("city", "Unknown")}

@@ -1,10 +1,16 @@
 from datetime import datetime
 from typing import List,Optional
-from pydantic import BaseModel 
+from pydantic import BaseModel , field_validator
 
 class VariationCreate(BaseModel):
     label: str
     target_url:str
+    @field_validator("target_url")
+    @classmethod
+    def ensure_https(cls, v):
+        if not v.startswith("http://") and not v.startswith("https://"):
+            return "https://"+v
+        return v
 
 class ProjectCreate(BaseModel):
     name:str
@@ -58,4 +64,3 @@ class ProjectAnalytics(BaseModel):
     total_clicks:int
     winner:Optional[str]
     variations: List[VariationAnalytics]
-

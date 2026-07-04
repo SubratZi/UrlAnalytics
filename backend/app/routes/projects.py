@@ -37,6 +37,16 @@ def get_project(project_id:str, db: Session = Depends(get_db)):
         raise HTTPException(404, "Project not found")
     return _serialize_project(project)
 
+@router.delete("/{project_id}")
+def delete_project(project_id: str, db: Session = Depends(get_db)):
+    project = db.query(Project).filter(Project.id == project_id).first()
+    if not project:
+        raise HTTPException(404, "Project not found")
+    
+    db.delete(project)
+    db.commit()
+    return{"message":"Project deleted successfully"}
+
 def _serialize_project(project:Project) -> dict:
     variations_out = []
     for v in project.variations:
