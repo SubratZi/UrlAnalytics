@@ -16,7 +16,7 @@ def get_project_analytics(project_id:str, db: Session  = Depends(get_db)):
     
     total_clicks = sum(len(v.clicks) for v in project.variations)
     variations_analytics = []
-    winner_id, winner_clicks = None, -1
+    winner_label, winner_clicks = None, -1
 
     for v in project.variations:
         clicks = v.clicks
@@ -38,10 +38,11 @@ def get_project_analytics(project_id:str, db: Session  = Depends(get_db)):
         )
         if n> winner_clicks:
             winner_clicks = n
-            winner_id = v.id
-    if total_clicks ==0:
-        winner_id = None
+            winner_label = v.label
+    click_counts = [len (v.clicks) for v in project.variations]
+    if total_clicks ==0 or click_counts.count(max(click_counts))> 1:
+        winner_label= None
     return ProjectAnalytics(
-        id= project.id, name = project.name, total_clicks = total_clicks, winner= winner_id, variations = variations_analytics
+        id= project.id, name = project.name, total_clicks = total_clicks, winner= winner_label, variations = variations_analytics
     )
     
