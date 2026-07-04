@@ -45,5 +45,5 @@ class Click(Base):
     referrer = Column(String, nullable=False)
     ip_address = Column(String, nullable=True)
 
-    variation = relationship("Variation", back_populates="clicks")
+    variations = relationship("Variation", back_populates="clicks")
     
