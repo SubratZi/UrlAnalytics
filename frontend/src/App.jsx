@@ -1,0 +1,20 @@
+import {Routes, Route} from 'react-router-dom'
+import Navbar from './components/Navbar'
+import Home from './pages/Home'
+import CreateProject from './pages/CreateProject'
+import Analytics from './pages/Analytics'
+
+function App(){
+  return(
+    <>
+    <Navbar/>
+    <Routes>
+      <Route path='/' element ={<Home />} />
+      <Route path='/create' element={<CreateProject />} />
+      <Route path="/analytics/:id" element= {<Analytics />} /> 
+    </Routes>
+    </>
+  )
+}
+
+export default App
