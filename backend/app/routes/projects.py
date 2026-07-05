@@ -58,4 +58,3 @@ def _serialize_project(project:Project) -> dict:
                 id= v.id, label=v.label, short_code = v.short_code, target_url= v.target_url, click_count=count)
         )
     return ProjectOut(id = project.id, name = project.name, created_at = project.created_at, variations = variations_out)
-

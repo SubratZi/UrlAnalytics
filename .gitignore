@@ -4,3 +4,9 @@ __pycache__/
 *.db
 .env
 todo.txt
+
+# Node
+
+frontend/node-modules/
+frontend/dist/
+frontend/.env
