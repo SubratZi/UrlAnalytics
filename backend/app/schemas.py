@@ -64,3 +64,7 @@ class ProjectAnalytics(BaseModel):
     total_clicks:int
     winner:Optional[str]
     variations: List[VariationAnalytics]
+
+class ProjectUpdate(BaseModel):
+    name: Optional[str] = None
+    new_variations: Optional[List[VariationCreate]] = None
