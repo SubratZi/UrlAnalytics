@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
 from app.database import get_db
 from app.models.models import Project, Variation
-from app.schemas import ProjectCreate, ProjectOut, VariationOut
+from app.schemas import ProjectCreate, ProjectOut, VariationOut, ProjectUpdate
 from app.redis_client import get_click_count
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
@@ -58,3 +57,21 @@ def _serialize_project(project:Project) -> dict:
                 id= v.id, label=v.label, short_code = v.short_code, target_url= v.target_url, click_count=count)
         )
     return ProjectOut(id = project.id, name = project.name, created_at = project.created_at, variations = variations_out)
+
+@router.patch("/{project_id}", response_model = ProjectOut)
+def update_project(project_id:str, payload: ProjectUpdate, db:Session = Depends(get_db)):
+    project = db.query(Project).filter(Project.id == project_id).first()
+    if not project:
+        raise HTTPException(404, "Project not found")
+    
+    if payload.name:
+        project.name = payload.name
+
+    if payload.new_variations:
+        for v in payload.new_variations:
+            variation = Variation(project_id = project.id, level = v.label, target_url= v.target_url)
+            db.add(variation)
+    
+    db.commit()
+    db.refresh(project)
+    return _serialize_project(project)
