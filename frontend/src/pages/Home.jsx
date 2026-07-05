@@ -36,7 +36,7 @@ function Home(){
     return(
         <div className="container">
             
-            <div style={{display: 'grid', gridTemplateColoumns: '1fr 1fr 1fr', gap:'1rem', marginBottom:'1.5rem'}}>
+            <div className='stats-grid' style={{display: 'grid', gridTemplateColoumns: '1fr 1fr 1fr', gap:'1rem', marginBottom:'1.5rem'}}>
                 <div className="card" style={{textAlign:'center'}}>
                     <p style={{fontSize: '2rem', fontWeight:700, color:'#6366f1'}}>{projects.length}</p>
                     <p style={{color: '#6b7280', fontSize:'0.9rem'}}>Projects</p>
