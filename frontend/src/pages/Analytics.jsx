@@ -63,7 +63,7 @@ function Analytics(){
                         </button>
                 ))}
             </div>
-            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap:'1rem'}}>
+            <div className='breakdown-grid' style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap:'1rem'}}>
                 <BreakdownChart title='Device' data={selectedVariation.device_breakdown}/>
                 <BreakdownChart title='Country' data={selectedVariation.country_breakdown}/>
                 <BreakdownChart title='Referrer' data={selectedVariation.referrer_breakdown} />

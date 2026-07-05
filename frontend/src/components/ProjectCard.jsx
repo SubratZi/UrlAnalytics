@@ -29,7 +29,7 @@ function ProjectCard({ project, onDelete }) {
             {project.variations.length} variations  {totalClicks} total clicks
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '0.4rem' }}>
+        <div className='card-actions' style={{ display: 'flex', gap: '0.4rem' }}>
           <button className="btn btn-secondary" style={{ fontSize: '0.8rem' }}
             onClick={() => navigate(`/edit/${project.id}`)}>
             Edit
