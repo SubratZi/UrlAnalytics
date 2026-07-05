@@ -7,6 +7,6 @@ todo.txt
 
 # Node
 
-frontend/node-modules/
+frontend/node_modules/
 frontend/dist/
 frontend/.env
