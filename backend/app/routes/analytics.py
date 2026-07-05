@@ -1,12 +1,23 @@
 from collections import Counter
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.models import Project
+from app.models.users import User
 from app.schemas import ProjectAnalytics, VariationAnalytics
+from app.services.auth import get_current_user
 
 router  = APIRouter(prefix = "/api/analytics", tags = ["analytics"])
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/api/auth/login')
+
+def get_auth_user(token:str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
+    user = get_current_user(token,db)
+    if not user:
+        raise HTTPException(401, "Not authenticated")
+    return user
+
 
 @router.get("/{project_id}", response_model = ProjectAnalytics)
 def get_project_analytics(project_id:str, db: Session  = Depends(get_db)):

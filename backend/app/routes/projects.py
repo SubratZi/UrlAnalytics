@@ -1,11 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from app.database import get_db
+from app.models.users import User
 from app.models.models import Project, Variation
 from app.schemas import ProjectCreate, ProjectOut, VariationOut, ProjectUpdate
 from app.redis_client import get_click_count
+from app.services.auth import get_current_user
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl = '/api/auth/login')
+
+def get_auth_user(token:str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
+    user = get_current_user(token, db)
+    if not user:
+        raise HTTPException(401, "Not authenticated")
+    return user
 
 @router.post("", response_model = ProjectOut)
 def create_project(payload: ProjectCreate, db:Session = Depends(get_db)):
