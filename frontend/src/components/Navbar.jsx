@@ -3,6 +3,12 @@ import { Link, useLocation } from 'react-router-dom'
 function Navbar() {
   const location = useLocation()
 
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    toast.sucess('Logged Out')
+    Navigate('/login')
+  }
+
   return (
     <nav style={{
       background: 'white',
@@ -29,12 +35,17 @@ function Navbar() {
           UrlAnalytics
         </span>
       </Link>
-
-      <Link to="/create">
-        <button className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-          <span>+</span> New Project
+      
+      <div style={{display:'flex', alignItems:'center', gap:'0.75rem'}}>
+        <Link to="/create">
+          <button className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <span>+</span> New Project
+          </button>
+        </Link>
+        <button className='btn btn-secondary' onClick={handleLogout}>
+          Logout
         </button>
-      </Link>
+      </div>
     </nav>
   )
 }

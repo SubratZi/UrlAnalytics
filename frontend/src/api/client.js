@@ -4,6 +4,19 @@ const api = axios.create({
     baseURL: '/api',
 })
 
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token')
+    if(token){
+        config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+})
+
+export const register= (data)=> api.post('/auth/register',data)
+export const login = (data) => api.post('/auth/login', new URLSearchParams(data))
+export const getMe = () => api.get('/auth/me')
+
+
 export const getProjects = () => api.get('/projects')
 export const getProject = (id) => api.get(`/projects/${id}`)
 export const createProject = (data) => api.post('/projects', data)

@@ -17,7 +17,7 @@ def get_auth_user(token:str = Depends(oauth2_scheme), db: Session = Depends(get_
         raise HTTPException(401, "Not authenticated")
     return user
 
-@router.post("", response_model = list[ProjectOut])
+@router.post("", response_model = ProjectOut)
 def create_project(payload: ProjectCreate, db:Session = Depends(get_db), user: User= Depends(get_auth_user)):
     if len(payload.variations)<1:
         raise HTTPException(400, "At least one variation is required")
@@ -56,7 +56,7 @@ def delete_project(project_id: str, db: Session = Depends(get_db), user: User = 
     db.commit()
     return{"message":"Project deleted successfully"}
 
-def _serialize_project(project:Project) -> dict:
+def _serialize_project(project:Project) -> ProjectOut:
     variations_out = []
     for v in project.variations:
         count = get_click_count(v.id)
