@@ -43,7 +43,7 @@ def register(payload: RegisterPayload,db: Session = Depends(get_db)):
 def login(form: OAuth2PasswordRequestForm = Depends(), db:Session = Depends(get_db)):
     user = get_user_by_email(db, form.username)
     if not user or not verify_password(form.password, user.hashed_password):
-        raise HTTPException(491, "Invalid email or password")
+        raise HTTPException(401, "Invalid email or password")
     
     token = create_access_token({'sub': user.id})
     return TokenOut(access_token=token)

@@ -17,12 +17,12 @@ def get_auth_user(token:str = Depends(oauth2_scheme), db: Session = Depends(get_
         raise HTTPException(401, "Not authenticated")
     return user
 
-@router.post("", response_model = ProjectOut)
-def create_project(payload: ProjectCreate, db:Session = Depends(get_db)):
+@router.post("", response_model = list[ProjectOut])
+def create_project(payload: ProjectCreate, db:Session = Depends(get_db), user: User= Depends(get_auth_user)):
     if len(payload.variations)<1:
         raise HTTPException(400, "At least one variation is required")
     
-    project = Project(name= payload.name)
+    project = Project(name= payload.name, user_id = user.id)
     db.add(project)
     db.flush()
 
@@ -35,20 +35,20 @@ def create_project(payload: ProjectCreate, db:Session = Depends(get_db)):
     return _serialize_project(project)
 
 @router.get("", response_model=list[ProjectOut])
-def list_projects(db:Session = Depends(get_db)):
-    projects = db.query(Project).order_by(Project.created_at.desc()).all()
+def list_projects(db:Session = Depends(get_db), user: User = Depends(get_auth_user)):
+    projects = db.query(Project).filter(Project.user_id == user.id).order_by(Project.created_at.desc()).all()
     return [_serialize_project(p) for p in projects]
 
 @router.get("/{project_id}", response_model = ProjectOut)
-def get_project(project_id:str, db: Session = Depends(get_db)):
-    project = db.query(Project).filter(Project.id == project_id).first()
+def get_project(project_id:str, db: Session = Depends(get_db), user: User = Depends(get_auth_user)):
+    project = db.query(Project).filter(Project.id == project_id, Project.user_id == user.id).first()
     if not project:
         raise HTTPException(404, "Project not found")
     return _serialize_project(project)
 
 @router.delete("/{project_id}")
-def delete_project(project_id: str, db: Session = Depends(get_db)):
-    project = db.query(Project).filter(Project.id == project_id).first()
+def delete_project(project_id: str, db: Session = Depends(get_db), user: User = Depends(get_auth_user)):
+    project = db.query(Project).filter(Project.id == project_id, Project.user_id == user.id).first()
     if not project:
         raise HTTPException(404, "Project not found")
     
@@ -69,8 +69,8 @@ def _serialize_project(project:Project) -> dict:
     return ProjectOut(id = project.id, name = project.name, created_at = project.created_at, variations = variations_out)
 
 @router.patch("/{project_id}", response_model = ProjectOut)
-def update_project(project_id:str, payload: ProjectUpdate, db:Session = Depends(get_db)):
-    project = db.query(Project).filter(Project.id == project_id).first()
+def update_project(project_id:str, payload: ProjectUpdate, db:Session = Depends(get_db), user: User =Depends(get_auth_user) ):
+    project = db.query(Project).filter(Project.id == project_id, Project.user_id == user.id).first()
     if not project:
         raise HTTPException(404, "Project not found")
     
@@ -79,7 +79,7 @@ def update_project(project_id:str, payload: ProjectUpdate, db:Session = Depends(
 
     if payload.new_variations:
         for v in payload.new_variations:
-            variation = Variation(project_id = project.id, level = v.label, target_url= v.target_url)
+            variation = Variation(project_id = project.id, label = v.label, target_url= v.target_url)
             db.add(variation)
     
     db.commit()
