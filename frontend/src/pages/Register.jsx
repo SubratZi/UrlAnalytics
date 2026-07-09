@@ -8,7 +8,7 @@ function Register() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirm, setConfirm] = useState('')
-    const [loading, setLoadin] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const handleRegister = async () => {
         if(!email || !password || !confirm) return toast.error('Fill all the fields first')

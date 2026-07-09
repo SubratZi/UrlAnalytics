@@ -1,12 +1,13 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 function Navbar() {
   const location = useLocation()
-
+  const navigate= useNavigate()
   const handleLogout = () => {
     localStorage.removeItem('token')
-    toast.sucess('Logged Out')
-    Navigate('/login')
+    toast.success('Logged Out')
+    navigate('/login')
   }
 
   return (

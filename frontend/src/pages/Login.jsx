@@ -63,7 +63,41 @@ function Login() {
               style={{ width: '100%', padding: '0.65rem', borderRadius: '10px', border: '1px solid #e5e7eb', fontSize: '0.95rem' }}
             />
           </div>
+          
+          <div style= {{
+            background: '#f0f0ff',
+            border: '1px solid #c7d2fe',
+            borderRadius: '10px',
+            padding: '0.8rem 1 rem',
+            fontSize: '0.82rem',
+            color:'#4338ca',
+          }}>
 
+          <p style={{fontWeight: 700, marginBottom:'0.3rem'}}>Demo Account</p>
+          <p>Email: <strong>demo@urlanalytics.com</strong></p>
+          <p>Password: <strong>demo123@</strong></p>
+          <button
+            type="button"
+            onClick={() =>{
+              setEmail('demo@urlanalytics.com')
+              setPassword('demo123@')
+            }}
+
+            style={{
+              marginTop: '0.5rem',
+              background: '#6366f1',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              padding: '0.35rem 0.8rem',
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              cursor:'pointer',
+            }}
+            >
+              Fill Credentials
+            </button>
+          </div>
           <button
             className="btn btn-primary"
             onClick={handleLogin}
