@@ -14,9 +14,12 @@ function ProjectCard({ project, onDelete }) {
   }
 
   const copyToClipboard = (shortCode) => {
-    navigator.clipboard.writeText(`${window.location.origin}/r/${shortCode}`)
-    toast.success('Copied to clipboard!')
-  }
+  const backendUrl = import.meta.env.VITE_API_URL
+    ? import.meta.env.VITE_API_URL.replace('/api', '')
+    : 'http://localhost:8000'
+  navigator.clipboard.writeText(`${backendUrl}/r/${shortCode}`)
+  toast.success('Copied to clipboard!')
+}
 
   const totalClicks = project.variations.reduce((s, v) => s + v.click_count, 0)
 
