@@ -4,8 +4,12 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from app.models.users import User
+import os
+from dotenv import load_dotenv
 
-SECRET_KEY = '4234@#$@@insiasdahdwhatiittinta@13@!#!#'
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 10
 
