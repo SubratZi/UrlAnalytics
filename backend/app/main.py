@@ -22,6 +22,7 @@ app.add_middleware(
     allow_origins=["http://localhost:5173",
                    "http://urlanalytics.vercel.app"],
     allow_credentials = True,
+    allow_orgins=["*"]
     allow_methods=["*"],
     allow_headers=["*"],
 )
